@@ -2,7 +2,7 @@
 """ Django management utility.
 - Create database migrations
 - Perform database migrations"""
-    
+
 import os
 import sys
 
@@ -17,3 +17,4 @@ if __name__ == '__main__':
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+    
