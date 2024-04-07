@@ -1,3 +1,5 @@
+""" views.py file"""
+
 from django.shortcuts import render,redirect
 from django.views import generic
 from django.views.generic import View
@@ -16,12 +18,7 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 import itertools
 
-
-
-def index(request):
-	return render(request, 'Travel2gether/index.html')
-
-
+#Verifying input function
 def verifyInput(username,password):
 	error = []
 	if len(username) < 4:
@@ -34,7 +31,7 @@ def verifyInput(username,password):
 	return error
 	
 
-
+#Registering user
 def registerUser(request):
 	if request.method == 'POST':
 		username = request.POST['username']
@@ -62,7 +59,7 @@ def registerUser(request):
 		return render(request, 'Travel2gether/registration_form.html')
 
 
-
+#defining index
 def index(request):
 	if request.method == 'POST':
 		username = request.POST['username']
@@ -78,12 +75,12 @@ def index(request):
 		return render(request, 'Travel2gether/index.html')
 
 
-
+#dashboard view
 def dashboard(request):
 	print(request.user)
 	return render(request, 'Travel2gether/dashboard.html')
 
-
+#feed function
 def feed(request):
 	try:
 		post_all = Post.objects.all().order_by('created_at')
@@ -103,7 +100,7 @@ def feed(request):
 	return render(request, 'Travel2gether/feed.html', context)
 
 
-
+#following functionality
 def followweb(request, username):
 	if request.user.username != username:
 		if request.method == 'POST':
@@ -117,7 +114,7 @@ def followweb(request, username):
 
 
 
-
+#unflowwing functionality
 def unfollowweb(request, username):
 	if request.method == 'POST':
 		disciple = User.objects.get(username=request.user.username)
@@ -128,7 +125,7 @@ def unfollowweb(request, username):
 		url = reverse('profile', kwargs = {'username' : username})
 		return redirect(url)
 
-
+#posting on the profile
 def postweb(request, username):
 	if request.method == 'POST':
 		post_form = CreatePost(request.POST, request.FILES)
@@ -142,7 +139,7 @@ def postweb(request, username):
 	return redirect(url)
 
 
-
+#commenting on the post
 def commentweb(request, username, post_id):
 	if request.method == 'POST':
 		comment_form = CreateComment(request.POST)
@@ -159,7 +156,7 @@ def commentweb(request, username, post_id):
 	return redirect(url)
 
 
-
+#search functionality
 def search(request):
     template='Travel2gether/search.html'
 
@@ -212,8 +209,7 @@ def search(request):
     return render(request,template,context)
 
 
-
-
+#profile function
 @login_required
 def profile(request, username):
 	
@@ -271,7 +267,7 @@ def profile(request, username):
 
 	return render(request, 'Travel2gether/profile.html', context)
 	
-	
+#deketing the post	
 def delete_post(request, username, post_id):
     post = get_object_or_404(Post, pk=post_id, user__username=username)
     if request.method == 'POST':
@@ -281,9 +277,7 @@ def delete_post(request, username, post_id):
     # Handle GET request if necessary
     return redirect('profile', username=username)
 
-
-
-
+#default page
 def welcome(request):
 	url = reverse('profile', kwargs = {'username' : request.user.username})
 	return redirect(url)
