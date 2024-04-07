@@ -1,4 +1,4 @@
-{%extends 'Travel2gether/base3.html'%}
+{% extends 'Travel2gether/base3.html' %}
 {% load crispy_forms_tags %}
 
 {% block body %}
@@ -6,16 +6,16 @@
 
 {% load static %}
 
-  <style type="text/css">
+<style type="text/css">
     #bg{
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100%;
   }
-  </style>
+</style>
 
 
-  <link href="{%static 'core/dashboard.css'%}" rel="stylesheet" />
+<link href="{%static 'core/dashboard.css'%}" rel="stylesheet" />
 
 
 
@@ -187,76 +187,32 @@
                   <br>
                   <br>
 
-
-
-
-
-{%for posts in person.post_set.all%}
-  <div class="col-sm-11">
-            <div class="jumbotron mt-3 bg-white shadow-lg">
-            <article class="media content-section shadow"></article>
-              <div class="media-body">
-
-
-                <div class="media-heading">
-                  <small class="float-right text-muted">{{posts.created_at}}</small>
-                    <h5>{{posts.user.username}}</h5>
-                </div>
-
-
-
-                 <div class="media-object avatar avatar-md mr-4" style="background-image: url({{user.profile.profile_photo.url}})">
-                   <br>
-                 <br>
-                 </div>
-                 <br>
-                 <br>
-
-                 <div class="media-body">
-                            {{posts.post_text}}
+                  <!-- Start of the posts loop -->
+                  {% for posts in person.post_set.all %}
+                    <div class="col-sm-11">
+                      <div class="jumbotron mt-3 bg-white shadow-lg">
+                        <article class="media content-section shadow">
+                          <div class="media-body">
+                            <div class="media-heading">
+                              <small class="float-right text-muted">{{ posts.created_at }}</small>
+                              <h5>{{ posts.user.username }}</h5>
+                            </div>
+                            <div class="media-body">
+                              {{ posts.post_text }}
+                            </div>
+                            <div>
+                              <img src="{{ posts.post_picture.url }}" style="width: 400px; height: 500px">
+                            </div>
+                            <form action="{% url 'delete_post' person.username posts.pk %}" method="post">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                           </div>
-
-                 
-
-                 <div>
-                  <img src="{{posts.post_picture.url}}" style="width: 400px; height: 500px">
-                </div>
-
-
-
-                <ul class="media-list">
-                            {%for comment in posts.comment_set.all%}
-                            <li class="media mt-4">
-                              <div class="media-object avatar mr-4" style="background-image: url({{comment.user.profile.profile_photo.url}})"></div>
-                              <div class="media-body">
-                                <strong>{{comment.user.username}}: </strong>
-                                {{comment.comment_text}}
-                              </div>
-                            </li>
-                            {%endfor%}
-                            
-                            <li class="media mt-4">
-                              <div class="media-object avatar mr-4" style="background-image: url({{user.profile.profile_photo.url}})"></div>
-                              <div class="media-body">
-                                <div class="col-sm-10">   
-                                <strong>{{user.username}}: </strong>
-                                <form action="{% url 'commentweb' person.username posts.pk%}" method="POST">
-                                  {%csrf_token%}
-                                  {{comment_form|crispy}}
-                                      <button type="submit" class="btn btn-primary">Post</button>
-                                </form>
-                                  
-                              </div>
-                               </div>
-                            </li>
-                          </ul>
-
-          <div class="d-flex justify-content-between">
-          </div>
-        </div>
-      </div>
-  </div>
-  {% endfor %}
+                        </article>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  <!-- End of the posts loop -->
 
                 </div>
                 
@@ -266,12 +222,6 @@
         </div>
       </div>
         
-
-     
-
-
-        
-
       </div>
     </div>
 

@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import get_object_or_404
 import itertools
 
 
@@ -156,8 +157,6 @@ def commentweb(request, username, post_id):
 
 	url = reverse('profile', kwargs={'username':username})
 	return redirect(url)
-	
-
 
 
 
@@ -271,6 +270,16 @@ def profile(request, username):
 		context.update({'comment_form':comment_form})
 
 	return render(request, 'Travel2gether/profile.html', context)
+	
+	
+def delete_post(request, username, post_id):
+    post = get_object_or_404(Post, pk=post_id, user__username=username)
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, f'Post Deleted Successfully')
+        return redirect('profile', username=username)
+    # Handle GET request if necessary
+    return redirect('profile', username=username)
 
 
 
