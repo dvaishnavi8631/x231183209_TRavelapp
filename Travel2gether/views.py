@@ -1,6 +1,16 @@
 """ views.py file"""
 
-from django.shortcuts import render, redirect
+import itertools
+
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -11,18 +21,7 @@ from .forms import (
     CreatePost,
     CreateComment,
 )
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from .models import User, Following, Follower, Post, Profile
-from django.urls import reverse
-from django.http import HttpResponseRedirect
-from django.contrib import auth
-from django.contrib.auth.hashers import make_password
-from django.shortcuts import get_object_or_404
-import itertools
 
 
 # Verifying input function
