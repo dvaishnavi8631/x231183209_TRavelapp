@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+""" Django management utility.
+    - Create database migrations
+    - Perform database migrations"""
+    
 import os
 import sys
 
