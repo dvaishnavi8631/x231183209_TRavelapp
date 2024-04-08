@@ -129,12 +129,12 @@ USE_TZ = True
 #LOGIN_REDIRECT_URL = 'welcome'
 #LOGIN_URL = 'login'
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}/static/'
-TATICFILES_STORAGE = 'your_project_name.storage.StaticS3Boto3Storage'
+STATIC_URL = 'https://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME
+# TATICFILES_STORAGE = 'your_project_name.storage.StaticS3Boto3Storage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
