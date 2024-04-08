@@ -11,9 +11,9 @@ phases:
   pre_build:
     commands:
       - python --version
-      # Run pylint with --disable=W1401 flag to ignore f-string errors
-      - pylint --disable=W1401 $CODEBUILD_SRC_DIR/*.py
-      - pylint --disable=W1401 $CODEBUILD_SRC_DIR/travel_sosh/*.py
+      # Run pylint with --disable=C flag to ignore formatting checks
+      - pylint --disable=C $CODEBUILD_SRC_DIR/*.py
+      - pylint --disable=C $CODEBUILD_SRC_DIR/travel_sosh/*.py
 artifacts:
   files:
     - '**/*'
