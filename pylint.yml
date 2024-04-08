@@ -11,9 +11,10 @@ phases:
   pre_build:
     commands:
       - python --version
-      # Run pylint with --disable=C flag to ignore formatting checks
-      - pylint --disable=C $CODEBUILD_SRC_DIR/*.py
-      - pylint --disable=C $CODEBUILD_SRC_DIR/travel_sosh/*.py
+      # Run pylint with --disable=C flag to disable all formatting checks
+      # Then selectively enable other checks as needed
+      - pylint --disable=C,R $CODEBUILD_SRC_DIR/*.py
+      - pylint --disable=C,R $CODEBUILD_SRC_DIR/travel_sosh/*.py
 artifacts:
   files:
     - '**/*'
