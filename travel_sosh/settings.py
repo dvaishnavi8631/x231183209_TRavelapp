@@ -27,11 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# AWS_STORAGE_BUCKET_NAME = 'x23183209-travelsosh'
-# AWS_S3_REGION_NAME = 'us-east-1'
-
-# # Configure static files storage
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # # Configure media files storage
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -40,7 +35,7 @@ ALLOWED_HOSTS = ['*']
 AWS_STORAGE_BUCKET_NAME = 'x23183209-travelsosh'
 AWS_S3_REGION_NAME = 'us-east-1'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Optional: Set custom domain for serving static files from S3
@@ -136,7 +131,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 #LOGIN_REDIRECT_URL = 'welcome'
 #LOGIN_URL = 'login'
