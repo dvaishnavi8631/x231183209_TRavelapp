@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - export SONAR_SCANNER_VERSION=5.0.1.3006
+      - export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      - curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      - unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      - export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      - export SONAR_SCANNER_OPTS="-server"
+  build:
+    commands:
+      - set -e
+      - sonar-scanner -X -Dsonar.login=6beb5099e3edac1708ee8a28b7f055afe8bb22a2 -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=dvaishnavi8631_x231183209_TRavelapp -Dsonar.organization=dvaishnavi8631 -DgeneratePom=true
+      - sleep 5
+      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=dvaishnavi8631_x231183209_TRavelapp >result.json
+      - cat result.json
