@@ -12,7 +12,7 @@ phases:
     commands:
       - python --version
       - pylint $CODEBUILD_SRC_DIR/*.py
-      - pylint $CODEBUILD_SRC_DIR/Travel_Sosh/*.py
+      - pylint $CODEBUILD_SRC_DIR/travel_sosh/*.py
 artifacts:
   files:
     - '**/*'

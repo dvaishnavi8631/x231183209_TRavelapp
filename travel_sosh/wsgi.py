@@ -1,5 +1,5 @@
 """
-WSGI config for Travel_Sosh project.
+WSGI config for travel_sosh project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Travel_Sosh.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'travel_sosh.settings')
 
 application = get_wsgi_application()

@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Travel_Sosh.urls'
+ROOT_URLCONF = 'travel_sosh.urls'
 
 TEMPLATES = [
     {
@@ -77,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Travel_Sosh.wsgi.application'
+WSGI_APPLICATION = 'travel_sosh.wsgi.application'
 
 
 # Database
