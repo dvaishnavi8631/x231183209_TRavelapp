@@ -133,7 +133,8 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_URL = 'https://%s.s3.amazonaws.com/static/' % AWS_STORAGE_BUCKET_NAME
+STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+
 # TATICFILES_STORAGE = 'your_project_name.storage.StaticS3Boto3Storage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
