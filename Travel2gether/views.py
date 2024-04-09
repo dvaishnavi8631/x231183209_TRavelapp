@@ -1,3 +1,5 @@
+# pylint: disable=C0115
+# Correct indentation
 """ views.py file"""
 
 from django.shortcuts import render,redirect
@@ -5,7 +7,7 @@ from django.views import generic
 from django.views.generic import View
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from .forms import UserForm,UpdateUserForm,UpdateProfileForm,CreatePost,CreateComment
-from django.http import HttpResponse 
+from django.http import HttpResponse
 from django.contrib.auth import authenticate,login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
