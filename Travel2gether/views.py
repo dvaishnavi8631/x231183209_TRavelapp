@@ -1,5 +1,5 @@
 # pylint: disable=C0115
-# Correct indentation
+
 """ views.py file"""
 
 from django.shortcuts import render,redirect
@@ -21,7 +21,7 @@ from django.shortcuts import get_object_or_404
 import itertools
 
 #Verifying input function
-def verifyInput(username,password):
+def verifyInput(username,password): 											#function for verifying input
 	error = []
 	if len(username) < 4:
 		error.append('Username Should At Least Be 4 Character Long')
@@ -34,7 +34,7 @@ def verifyInput(username,password):
 	
 
 #Registering user
-def registerUser(request):
+def registerUser(request):														#function for registering input
 	if request.method == 'POST':
 		username = request.POST['username']
 		email = request.POST['email']
@@ -62,7 +62,7 @@ def registerUser(request):
 
 
 #defining index
-def index(request):
+def index(request):																 #function defination for my startup page
 	if request.method == 'POST':
 		username = request.POST['username']
 		password = request.POST['password']
@@ -78,12 +78,12 @@ def index(request):
 
 
 #dashboard view
-def dashboard(request):
+def dashboard(request):                                                         #dashboard functionality
 	print(request.user)
 	return render(request, 'Travel2gether/dashboard.html')
 
 #feed function
-def feed(request):
+def feed(request):																#feed definition
 	try:
 		post_all = Post.objects.all().order_by('created_at')
 		print(post_all)
@@ -103,8 +103,8 @@ def feed(request):
 
 
 #following functionality
-def followweb(request, username):
-	if request.user.username != username:
+def followweb(request, username):												#Follow functionality
+	if request.user.username != username:									
 		if request.method == 'POST':
 			disciple = User.objects.get(username=request.user.username)
 			leader = User.objects.get(username=username)
@@ -117,7 +117,7 @@ def followweb(request, username):
 
 
 #unflowwing functionality
-def unfollowweb(request, username):
+def unfollowweb(request, username):												#unfollow functionality
 	if request.method == 'POST':
 		disciple = User.objects.get(username=request.user.username)
 		leader = User.objects.get(username=username)
@@ -212,7 +212,7 @@ def search(request):
 
 
 #profile function
-@login_required
+@login_required																	#profile page
 def profile(request, username):
 	
 	if request.method == 'POST':
@@ -270,7 +270,7 @@ def profile(request, username):
 	return render(request, 'Travel2gether/profile.html', context)
 	
 #deketing the post	
-def delete_post(request, username, post_id):
+def delete_post(request, username, post_id):									#DELETE FUNCtionality
     post = get_object_or_404(Post, pk=post_id, user__username=username)
     if request.method == 'POST':
         post.delete()
