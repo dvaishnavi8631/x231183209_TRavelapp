@@ -15,8 +15,8 @@ phases:
   build:
     commands:
       - set -e
-      export SONAR_SCANNER_OPTS="-Xmx2g" # Set maximum heap size to 2GB
+      - export SONAR_SCANNER_OPTS="-Xmx2g" # Set maximum heap size to 2GB
       - sonar-scanner -X -Dsonar.login=e4a9b1f90ea338dfed20428f635a73814af8ae17 -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=dvaishnavi8631_x231183209_TRavelapp -Dsonar.organization=dvaishnavi8631 -DgeneratePom=true
       - sleep 5
-      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=dvaishnavi8631_x231183209_TRavelapp >result.json
+      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=dvaishnavi8631_x231183209_TRavelapp > result.json
       - cat result.json
