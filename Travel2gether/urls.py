@@ -24,5 +24,5 @@ path('postweb/<username>/', views.postweb,name='postweb'),
 path('commentweb/<username>/<post_id>/', views.commentweb,name = 'commentweb'),
 path('welcome/',views.welcome,name='welcome'),
 path('search/', user_views.search, name='search'),
-# path('delete-post/<username>/<int:post_id>/', views.delete_post, name='delete_post'),
+path('delete-post/<username>/<int:post_id>/', views.delete_post, name='delete_post'),
 ]
