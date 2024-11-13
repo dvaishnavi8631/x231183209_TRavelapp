@@ -13,7 +13,7 @@ spec:
         app: travel_sosh
     spec:
       containers:
-        - name: x23183209-container
+        - name: travel_sosh-container
           image: 250738637992.dkr.ecr.eu-west-1.amazonaws.com/x23183209-multicloud:latest
           ports:
             - containerPort: 80
@@ -21,11 +21,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: your-app-service
+  name: travel_sosh-service
 spec:
   type: LoadBalancer
   selector:
-    app: your-app
+    app: travel_sosh
   ports:
     - protocol: TCP
       port: 80
