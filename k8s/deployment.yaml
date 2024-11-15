@@ -1,21 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: travelapp-deployment
+  name: travel-sosh-deployment
   labels:
-    app: travelapp
+    app: travel-sosh
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: travelapp
+      app: travel-sosh
   template:
     metadata:
       labels:
-        app: travelapp
+        app: travel-sosh
     spec:
       containers:
-      - name: travelapp
-        image: travel_sosh:latest
+      - name: travel-sosh
+        image: travel_sosh:latest  # Replace with your ECR image URL
         ports:
-        - containerPort: 80
+        - containerPort: 8000
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: "Travel2gether.settings"
+        - name: ALLOWED_HOSTS
+          value: "*"
+        volumeMounts:
+        - name: static-files
+          mountPath: /app/staticfiles
+        - name: media-files
+          mountPath: /app/media
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "0.5"
+          requests:
+            memory: "256Mi"
+            cpu: "0.2"
+      volumes:
+      - name: static-files
+        emptyDir: {}
+      - name: media-files
+        emptyDir: {}
