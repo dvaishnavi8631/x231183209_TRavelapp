@@ -6,16 +6,22 @@ pipeline {
         ECR_REPOSITORY = 'travel-sosh'  // ECR repository for your app
         SSO_PROFILE = 'MSCCLOUD-250738637992'  // AWS SSO profile name
         CLUSTER_NAME = 'x23183209-multicloud'  // EKS cluster name
+        GIT_REPO = 'https://github.com/dvaishnavi8631/x231183209_TRavelapp.git'  // Your GitHub repository URL
     }
     stages {
-        stage('Checkout Git Repository') {
+        stage('Checkout Code') {
             steps {
                 script {
-                    echo 'Checking out the Git repository...'
-                    checkout scm  // Ensure the repository is checked out
-                    // Verify Dockerfile is present in the workspace
-                    sh 'ls -l'  // List files to ensure the repository is fetched correctly
-                    sh 'find . -name "Dockerfile"'  // Verify if the Dockerfile exists
+                    echo 'Checking out the Git repository'
+                    // Checkout the repository using GitHub credentials
+                    checkout([$class: 'GitSCM', 
+                        branches: [[name: '*/main']],  // Specify the branch to checkout
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            url: "${GIT_REPO}",
+                            credentialsId: 'github-pat'  // Ensure this matches the Jenkins credentials ID for GitHub
+                        ]])
                 }
             }
         }
@@ -23,18 +29,16 @@ pipeline {
             steps {
                 script {
                     echo 'Ensure that AWS SSO login has been performed manually before this step.'
-                    // Trigger SSO login automatically (if supported by the environment)
-                    sh """
-                        aws sso login --profile ${SSO_PROFILE} --region ${AWS_REGION}
-                    """
+                    // Trigger SSO login using AWS CLI
+                    sh "aws sso login --profile ${SSO_PROFILE} --region ${AWS_REGION}"
                 }
             }
         }
         stage('Login to ECR') {
             steps {
                 script {
-                    // Log into ECR using AWS CLI
                     echo 'Logging into AWS ECR'
+                    // Get login password for ECR and login
                     def loginPassword = sh(script: "aws ecr get-login-password --region ${AWS_REGION} --profile ${SSO_PROFILE}", returnStdout: true).trim()
                     sh "docker login -u AWS -p ${loginPassword} ${ECR_REGISTRY}"
                 }
@@ -44,7 +48,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker image'
-                    // Build the Docker image for your Django app
+                    // Build the Docker image with the tag from ECR repository
                     sh "docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER} ."
                 }
             }
@@ -53,7 +57,7 @@ pipeline {
             steps {
                 script {
                     echo 'Pushing Docker image to AWS ECR'
-                    // Push the Docker image to ECR
+                    // Push the built image to ECR
                     sh "docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}"
                 }
             }
@@ -62,10 +66,8 @@ pipeline {
             steps {
                 script {
                     echo 'Configuring kubectl for EKS'
-                    // Configure kubectl to use the EKS cluster
-                    sh """
-                        aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME} --profile ${SSO_PROFILE}
-                    """
+                    // Update kubeconfig for EKS to interact with the cluster
+                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME} --profile ${SSO_PROFILE}"
                 }
             }
         }
@@ -73,11 +75,9 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to EKS'
-                    // Update deployment.yaml with the new image tag
-                    sh """
-                        sed -i 's|<ECR-IMAGE-URL>|${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}|g' k8s/deployment.yaml
-                    """
-                    // Apply Kubernetes manifests
+                    // Update the deployment.yaml with the new image tag
+                    sh "sed -i 's|<ECR-IMAGE-URL>|${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}|g' k8s/deployment.yaml"
+                    // Apply the Kubernetes manifests to EKS
                     sh "kubectl apply -f k8s/"
                 }
             }
