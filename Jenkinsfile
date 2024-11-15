@@ -5,9 +5,20 @@ pipeline {
         ECR_REGISTRY = '250738637992.dkr.ecr.us-east-1.amazonaws.com'  // Your ECR registry URL
         ECR_REPOSITORY = 'travel-sosh'  // ECR repository for your app
         SSO_PROFILE = 'MSCCLOUD-250738637992'  // AWS SSO profile name
-        CLUSTER_NAME = 'your-eks-cluster'  // EKS cluster name
+        CLUSTER_NAME = 'x23183209-multicloud'  // EKS cluster name
     }
     stages {
+        stage('Checkout Git Repository') {
+            steps {
+                script {
+                    echo 'Checking out the Git repository...'
+                    checkout scm  // Ensure the repository is checked out
+                    // Verify Dockerfile is present in the workspace
+                    sh 'ls -l'  // List files to ensure the repository is fetched correctly
+                    sh 'find . -name "Dockerfile"'  // Verify if the Dockerfile exists
+                }
+            }
+        }
         stage('Login to AWS via SSO') {
             steps {
                 script {
