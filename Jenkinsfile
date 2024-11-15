@@ -13,7 +13,9 @@ pipeline {
                 script {
                     echo 'Ensure that AWS SSO login has been performed manually before this step.'
                     // Trigger SSO login automatically (if supported by the environment)
-                    sh "aws sso login --profile ${SSO_PROFILE} --region ${AWS_REGION}"
+                    sh """
+                        aws sso login --profile ${SSO_PROFILE} --region ${AWS_REGION}
+                    """
                 }
             }
         }
@@ -21,6 +23,7 @@ pipeline {
             steps {
                 script {
                     // Log into ECR using AWS CLI
+                    echo 'Logging into AWS ECR'
                     def loginPassword = sh(script: "aws ecr get-login-password --region ${AWS_REGION} --profile ${SSO_PROFILE}", returnStdout: true).trim()
                     sh "docker login -u AWS -p ${loginPassword} ${ECR_REGISTRY}"
                 }
@@ -29,6 +32,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    echo 'Building Docker image'
                     // Build the Docker image for your Django app
                     sh "docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER} ."
                 }
@@ -37,6 +41,7 @@ pipeline {
         stage('Push Docker Image to ECR') {
             steps {
                 script {
+                    echo 'Pushing Docker image to AWS ECR'
                     // Push the Docker image to ECR
                     sh "docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}"
                 }
@@ -45,14 +50,18 @@ pipeline {
         stage('Configure kubectl for EKS') {
             steps {
                 script {
+                    echo 'Configuring kubectl for EKS'
                     // Configure kubectl to use the EKS cluster
-                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME} --profile ${SSO_PROFILE}"
+                    sh """
+                        aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME} --profile ${SSO_PROFILE}
+                    """
                 }
             }
         }
         stage('Deploy to EKS') {
             steps {
                 script {
+                    echo 'Deploying to EKS'
                     // Update deployment.yaml with the new image tag
                     sh """
                         sed -i 's|<ECR-IMAGE-URL>|${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}|g' k8s/deployment.yaml
